@@ -31,28 +31,38 @@ class DotfilesManager
   end
 
   def pull(options = [])
-    @config.get(:synchronize).each() { |entry|
-      entry = entry.clone()
-      on_command = entry.delete(:on_command)
-      if !on_command.nil?() && on_command != 'pull'
-        next
-      end
-
-      command = DotfilesManager::Utility.get_command_instance(self, entry)
-      command.pull(options)
-    }
+    _run(:pull, options)
   end
 
   def push(options = [])
-    @config.get(:synchronize).each() { |entry|
+    _run(:push, options)
+  end
+
+  def _run(action, options)
+    entries = @config.get(:synchronize)
+    entries.each() { |entry|
       entry = entry.clone()
-      on_command = entry.delete(:on_command)
-      if !on_command.nil?() && on_command != 'push'
+      on = entry.delete(:on)
+      if !on.nil?() && on != action.to_s()
         next
       end
 
+      if entry[:type] == 'reload'
+        if entry.keys().length > 1
+          raise "Unknown keys #{(entry.keys() - [:type]).inspect()} for " +
+            "entry #{entry.inspect()}"
+        end
+
+        @config.reload()
+        new_entries = @config.get(:synchronize)
+        if new_entries != entries
+          entries = new_entries
+          retry
+        end
+      end
+
       command = DotfilesManager::Utility.get_command_instance(self, entry)
-      command.push(options)
+      command.method(action).call(options)
     }
   end
 
