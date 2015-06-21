@@ -39,11 +39,21 @@ class DotfilesManager::File
   end
 
   def _md5sum(file)
-    result = `#{_sudo(file)} md5sum #{Shellwords.escape(file)}`.strip()
+    if _is_file(file)
+      result = `#{_sudo(file)} md5sum #{Shellwords.escape(file)}`;
+    else
+      result = `\
+        find #{Shellwords.escape(file)} -type f -exec md5sum {} \; | \
+        sort -k 34 | \
+        md5sum \
+      `
+    end
+
     if $? != 0
       raise "Failed to get md5 sum of file #{file}"
     end
 
+    result = result.strip().split(' ')[0]
     return result
   end
 
@@ -57,13 +67,7 @@ class DotfilesManager::File
   end
 
   def _replace_file(source, target)
-    ignore = (
-      _is_file(source) &&
-      _is_file(target) &&
-      _md5sum(source) == _md5sum(target)
-    )
-
-    if ignore
+    if _md5sum(source) == _md5sum(target)
       return
     end
 
