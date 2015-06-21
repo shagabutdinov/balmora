@@ -41,7 +41,7 @@ class DotfilesManager::PackageYaourt
   end
 
   def _install()
-    @manager.run('yaourt', '--noconfirm', '-S', *@packages)
+    @manager.run('yaourt', '--noconfirm', '-S', '--needed', *@packages)
   end
 
 end

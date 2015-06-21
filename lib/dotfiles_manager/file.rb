@@ -1,3 +1,4 @@
+require 'shellwords'
 
 class DotfilesManager::File
 
@@ -32,7 +33,40 @@ class DotfilesManager::File
     _replace_file(File.expand_path(@path), _get_storage_path())
   end
 
+  def _is_file(file)
+    type = `#{_sudo(file)} stat -c "%F" #{Shellwords.escape(source)}`.strip()
+    return type == 'regular file'
+  end
+
+  def _md5sum(file)
+    result = `#{_sudo(file)} md5sum #{Shellwords.escape(source)}`.strip()
+    if $? != 0
+      raise "Failed to get md5 sum of file #{file}"
+    end
+
+    return result
+  end
+
+  def _sudo(file)
+    sudo = ''
+    if file.start_with?('/')
+      sudo = 'sudo'
+    end
+
+    return sudo
+  end
+
   def _replace_file(source, target)
+    ignore = (
+      _is_file(source) &&
+      _is_file(target) &&
+      _md5sum(source) == _md5sum(target)
+    )
+
+    if ignore
+      return
+    end
+
     @manager.run('mkdir', '-p', File.dirname(target))
 
     sudo = []
