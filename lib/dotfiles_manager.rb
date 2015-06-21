@@ -58,7 +58,7 @@ class DotfilesManager
         if @config.get(:synchronize) != entries
           raise Retry.new()
         end
-      else
+
         next
       end
 
