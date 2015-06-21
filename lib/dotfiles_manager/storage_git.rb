@@ -30,7 +30,7 @@ class DotfilesManager::StorageGit
 
   def pull(options)
     path = _get_storage_path()
-    if File.exists(File.join(path, '.git'))
+    if File.exist?(File.join(path, '.git'))
       Dir.chdir(path) {
         @manager.run('git', 'pull')
       }
@@ -44,7 +44,7 @@ class DotfilesManager::StorageGit
     path = File.join(DotfilesManager::PATH, @name)
 
     Dir.chdir(path) {
-      if !File.exists?(path)
+      if !File.exist?(path)
         @manager.run('git', 'init')
       end
 
