@@ -21,6 +21,7 @@ class DotfilesManager::PackagePacmanKey
         @manager.run('sudo', 'pacman-key', '-f', key)
       rescue DotfilesManager::RunError
         @manager.run('sudo', 'pacman-key', '-r', key)
+        @manager.run('sudo', 'pacman-key', '--lsign-key', key)
       end
     }
   end
