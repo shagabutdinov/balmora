@@ -34,12 +34,12 @@ class DotfilesManager::File
   end
 
   def _is_file(file)
-    type = `#{_sudo(file)} stat -c "%F" #{Shellwords.escape(source)}`.strip()
+    type = `#{_sudo(file)} stat -c "%F" #{Shellwords.escape(file)}`.strip()
     return type == 'regular file'
   end
 
   def _md5sum(file)
-    result = `#{_sudo(file)} md5sum #{Shellwords.escape(source)}`.strip()
+    result = `#{_sudo(file)} md5sum #{Shellwords.escape(file)}`.strip()
     if $? != 0
       raise "Failed to get md5 sum of file #{file}"
     end
