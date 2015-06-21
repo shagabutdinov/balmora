@@ -25,15 +25,11 @@ class DotfilesManager::File
   end
 
   def pull(options)
-    source = _get_storage_path()
-    target = File.expand_path(@path)
-    _replace_file(source, target)
+    _replace_file(_get_storage_path(), File.expand_path(@path))
   end
 
   def push(options)
-    target = _get_storage_path()
-    @manager.run('mkdir', '-p', File.dirname(target))
-    _replace_file(source, target)
+    _replace_file(File.expand_path(@path), _get_storage_path())
   end
 
   def _replace_file(source, target)
