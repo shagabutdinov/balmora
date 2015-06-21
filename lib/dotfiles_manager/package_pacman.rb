@@ -16,7 +16,7 @@ class DotfilesManager::PackagePacman
   end
 
   def _install()
-    @manager.run('sudo', 'pacman', '--noconfirm', '-S', *@packages)
+    @manager.run('sudo', 'pacman', '--noconfirm', '-Sy', *@packages)
   end
 
 end

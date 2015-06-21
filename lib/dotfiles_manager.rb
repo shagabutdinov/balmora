@@ -3,6 +3,8 @@ require 'shellwords'
 
 class DotfilesManager
 
+  class RunError < StandardError; end
+
   PATH = File.expand_path('~/.config/dotfiles-manager')
 
   attr_reader :config
@@ -24,7 +26,7 @@ class DotfilesManager
 
     result = `#{shell_command}`
     if $?.exitstatus != 0
-      raise "Failed to execute command #{shell_command}"
+      raise RunError.new("Failed to execute command #{shell_command}")
     end
 
     return result
@@ -78,4 +80,5 @@ require 'dotfiles_manager/utility.rb'
 require 'dotfiles_manager/file.rb'
 require 'dotfiles_manager/storage_git.rb'
 require 'dotfiles_manager/package_pacman.rb'
+require 'dotfiles_manager/package_pacman_key.rb'
 require 'dotfiles_manager/package_yaourt.rb'
