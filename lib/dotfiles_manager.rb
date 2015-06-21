@@ -49,9 +49,10 @@ class DotfilesManager
       end
 
       if entry[:type] == 'reload'
-        if entry.keys().length > 1
-          raise "Unknown keys #{(entry.keys() - [:type]).inspect()} for " +
-            "entry #{entry.inspect()}"
+        extra_keys = entry.keys() - [:on, :type]
+        if extra_keys != []
+          raise "Unknown keys #{extra_keys.inspect()} for entry " +
+            entry.inspect()
         end
 
         @config.reload()
