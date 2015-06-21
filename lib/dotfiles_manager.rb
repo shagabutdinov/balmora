@@ -1,8 +1,9 @@
 require 'fileutils'
+require 'shellwords'
 
 class DotfilesManager
 
-  PATH = '.config/dotfiles-manager'
+  PATH = File.expand_path('~/.config/dotfiles-manager')
 
   attr_reader :config
 
@@ -12,10 +13,21 @@ class DotfilesManager
   end
 
   def run(command, *arguments)
-    if !system(command, *arguments)
-      raise "Failed to execute command #{command.inspect()} " +
-        "#{arguments.inspect()}"
+    shell_command =
+      ([command] + arguments).
+      collect() { |arg| Shellwords.escape(arg) }.
+      join(' ')
+
+    if @options[:verbose]
+      puts(shell_command)
     end
+
+    result = `#{shell_command}`
+    if $?.exitstatus != 0
+      raise "Failed to execute command #{shell_command}"
+    end
+
+    return result
   end
 
   def pull(options = [])
@@ -44,39 +56,7 @@ class DotfilesManager
 
 end
 
-require_relative 'dotfiles_manager/storage_git.rb'
-require_relative 'dotfiles_manager/config.rb'
-require_relative 'dotfiles_manager/file.rb'
-require_relative 'dotfiles_manager/utility.rb'
-
-config = DotfilesManager::Config.new()
-manager = DotfilesManager.new(config)
-
-manager.method(ARGV[0]).call(ARGV[1..-1])
-# manager.push()
-# manager.pull(ARGV)
-
-# {
-#   "type": "file",
-#   "path": ".Xresources",
-# }
-
-# {
-#   "type": "folder",
-#   "path": ".Xresources",
-# }
-
-# {
-#   "type": "pacman-package",
-#   "name": "vim",
-# }
-
-# {
-#   "type": "yaourt-package",
-#   "name": "sublime-text-dev",
-# }
-
-# {
-#   "type": "command",
-#   "command": "vpn-up",
-# }
+require 'dotfiles_manager/storage_git.rb'
+require 'dotfiles_manager/config.rb'
+require 'dotfiles_manager/file.rb'
+require 'dotfiles_manager/utility.rb'

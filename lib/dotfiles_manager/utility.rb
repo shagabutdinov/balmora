@@ -13,17 +13,17 @@ module DotfilesManager::Utility
     end
 
     if option.length == 1
-      index = args.index('-' + _get_arguments_key(option))
+      index = args.index('-' + get_arguments_key(option))
       if !index.nil?()
         return args[index + 1]
       end
     end
 
-    if args.index('--no-' + _get_arguments_key(option))
+    if args.index('--no-' + get_arguments_key(option))
       return false
     end
 
-    index = args.index('--' + _get_arguments_key(option))
+    index = args.index('--' + get_arguments_key(option))
     if index.nil?()
       return nil
     end
@@ -35,7 +35,7 @@ module DotfilesManager::Utility
     return args[index + 1]
   end
 
-  def self._get_arguments_key(key)
+  def self.get_arguments_key(key)
     key = key.gsub('_', '{{__DASH__}}')
     key = key.gsub('-', '_')
     key = key.gsub('{{__DASH__}}', '-')
@@ -47,17 +47,17 @@ module DotfilesManager::Utility
     result = {}
     args.each_with_index() { |value, index|
       if value.start_with?('--no-')
-        result[_get_arguments_key(value[5..-1])] = true
+        result[get_arguments_key(value[5..-1])] = true
         next
       end
 
       if value.start_with?('--')
         if args[index + 1].nil?() || args[index + 1].start_with?('--')
-          result[_get_arguments_key(value[2..-1])] = true
+          result[get_arguments_key(value[2..-1])] = true
           next
         end
 
-        result[_get_arguments_key(value[2..-1])] = args[index + 1]
+        result[get_arguments_key(value[2..-1])] = args[index + 1]
       end
     }
 

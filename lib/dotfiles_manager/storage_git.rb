@@ -24,21 +24,41 @@ class DotfilesManager::StorageGit
     target = File.join(target, path)
   end
 
+  def _get_storage_path()
+    return File.join(DotfilesManager::PATH, @name)
+  end
+
   def pull(options)
-    Dir.chdir(File.join(DotfilesManager::PATH, @name)) {
-      @manager.run('git', 'pull')
-    }
+    path = _get_storage_path()
+    if File.exists(File.join(path, '.git'))
+      Dir.chdir(path) {
+        @manager.run('git', 'pull')
+      }
+    else
+      url = @manager.config.get(['storages', @name, 'url'])
+      @manager.run('git', 'clone', url, path)
+    end
   end
 
   def push(options)
-    Dir.chdir(File.join(DotfilesManager::PATH, @name)) {
+    path = File.join(DotfilesManager::PATH, @name)
+
+    Dir.chdir(path) {
+      if !File.exists?(path)
+        @manager.run('git', 'init')
+      end
+
       message =
         DotfilesManager::Utility.
         get_console_option(options, ['m', 'message']) ||
         (raise "Message (flag \"--message\" or \"-m\") should be specified " +
-          "in arguments for storage-git.push")
+          "in command line arguments for entry #{@entry}")
+
       @manager.run('git', 'add', '.')
-      @manager.run('git', 'commit', '-m', message)
+      if @manager.run('git', 'status', '--short').strip() != ''
+        @manager.run('git', 'commit', '-m', message)
+      end
+
       @manager.run('git', 'push')
     }
   end
