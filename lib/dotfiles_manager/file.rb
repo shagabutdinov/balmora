@@ -27,24 +27,28 @@ class DotfilesManager::File
   def pull(options)
     source = _get_storage_path()
     target = File.expand_path(@path)
-    @manager.run('mkdir', '-p', File.dirname(target))
-    if File.exist?(source) && File.exist?(target)
-      @manager.run('rm', '-rf', target)
-    end
-
-    @manager.run('cp', '-R', source, target)
+    _replace_file(source, target)
   end
 
   def push(options)
     target = _get_storage_path()
     @manager.run('mkdir', '-p', File.dirname(target))
+    _replace_file(source, target)
+  end
 
-    source = File.expand_path(@path)
-    if File.exist?(source) && File.exist?(target)
-      @manager.run('rm', '-rf', target)
+  def _replace_file(source, target)
+    @manager.run('mkdir', '-p', File.dirname(target))
+
+    sudo = []
+    if target.start_with?('/')
+      sudo.push('sudo')
     end
 
-    @manager.run('cp', '-R', source, target)
+    if File.exist?(source) && File.exist?(target)
+      @manager.run(*sudo, 'rm', '-rf', target)
+    end
+
+    @manager.run(*sudo, 'cp', '-R', source, target)
   end
 
 end
