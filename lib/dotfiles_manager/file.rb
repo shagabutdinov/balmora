@@ -38,11 +38,13 @@ class DotfilesManager::File
     if `#{_sudo(file)} stat -c "%F" #{escaped}`.strip() == 'regular file'
       result = `#{_sudo(file)} md5sum #{escaped}`;
     else
-      result = `\
-        #{_sudo(file)} find #{escaped} -type f -exec md5sum {} \; | \
-        sort -k 34 | \
-        md5sum \
-      `
+      Dir.chdir(file) {
+        result = `\
+          #{_sudo(file)} find . -type f -exec md5sum {} \\; | \
+          sort -k 34 | \
+          md5sum \
+        `
+      }
     end
 
     if $? != 0
