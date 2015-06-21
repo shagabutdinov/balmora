@@ -33,7 +33,8 @@ class DotfilesManager
   def pull(options = [])
     @config.get(:synchronize).each() { |entry|
       entry = entry.clone()
-      if entry.has_key?(:on) && !entry.delete(:on).include?('pull')
+      on_command = entry.delete(:on_command)
+      if !on_command.nil?() && on_command != 'pull'
         next
       end
 
@@ -45,7 +46,8 @@ class DotfilesManager
   def push(options = [])
     @config.get(:synchronize).each() { |entry|
       entry = entry.clone()
-      if entry.has_key?(:on) && !entry.delete(:on).include?('push')
+      on_command = entry.delete(:on_command)
+      if !on_command.nil?() && on_command != 'push'
         next
       end
 
@@ -56,7 +58,10 @@ class DotfilesManager
 
 end
 
-require 'dotfiles_manager/storage_git.rb'
 require 'dotfiles_manager/config.rb'
-require 'dotfiles_manager/file.rb'
 require 'dotfiles_manager/utility.rb'
+
+require 'dotfiles_manager/file.rb'
+require 'dotfiles_manager/storage_git.rb'
+require 'dotfiles_manager/package_pacman.rb'
+require 'dotfiles_manager/package_yaourt.rb'

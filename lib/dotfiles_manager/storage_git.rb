@@ -35,7 +35,7 @@ class DotfilesManager::StorageGit
         @manager.run('git', 'pull')
       }
     else
-      url = @manager.config.get(['storages', @name, 'url'])
+      url = @manager.config.get([:storages, @name.to_sym(), :url])
       @manager.run('git', 'clone', url, path)
     end
   end

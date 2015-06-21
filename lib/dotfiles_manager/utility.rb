@@ -42,7 +42,6 @@ module DotfilesManager::Utility
     return key
   end
 
-
   def self.get_arguments_hash(args)
     result = {}
     args.each_with_index() { |value, index|
