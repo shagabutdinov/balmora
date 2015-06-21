@@ -33,17 +33,13 @@ class DotfilesManager::File
     _replace_file(File.expand_path(@path), _get_storage_path())
   end
 
-  def _is_file(file)
-    type = `#{_sudo(file)} stat -c "%F" #{Shellwords.escape(file)}`.strip()
-    return type == 'regular file'
-  end
-
   def _md5sum(file)
-    if _is_file(file)
-      result = `#{_sudo(file)} md5sum #{Shellwords.escape(file)}`;
+    escaped = Shellwords.escape(file)
+    if `#{_sudo(file)} stat -c "%F" #{escaped}`.strip() == 'regular file'
+      result = `#{_sudo(file)} md5sum #{escaped}`;
     else
       result = `\
-        find #{Shellwords.escape(file)} -type f -exec md5sum {} \; | \
+        #{_sudo(file)} find #{escaped} -type f -exec md5sum {} \; | \
         sort -k 34 | \
         md5sum \
       `
