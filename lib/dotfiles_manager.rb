@@ -20,7 +20,7 @@ class DotfilesManager
       collect() { |arg| Shellwords.escape(arg) }.
       join(' ')
 
-    if @options[:verbose]
+    if @options[:verbose] == true
       puts(shell_command)
     end
 
@@ -76,6 +76,9 @@ end
 
 require 'dotfiles_manager/config.rb'
 require 'dotfiles_manager/utility.rb'
+
+require 'dotfiles_manager/command.rb'
+require 'dotfiles_manager/ruby_script.rb'
 
 require 'dotfiles_manager/file.rb'
 require 'dotfiles_manager/storage_git.rb'

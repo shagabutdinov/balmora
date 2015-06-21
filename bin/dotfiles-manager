@@ -8,7 +8,7 @@ begin
   verbose = !args.delete('--verbose').nil?()
 
   config = DotfilesManager::Config.new()
-  manager = DotfilesManager.new(config, {verbose: true})
+  manager = DotfilesManager.new(config, {verbose: verbose})
 
   manager.
     method(DotfilesManager::Utility.get_arguments_key(args[0])).
