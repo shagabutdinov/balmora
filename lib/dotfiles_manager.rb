@@ -44,8 +44,7 @@ class DotfilesManager
     entries = @config.get(:synchronize)
     entries.each() { |entry|
       entry = entry.clone()
-      on = entry.delete(:on)
-      if !on.nil?() && on != action.to_s()
+      if !entry[:on].nil?() && entry[:on] != action.to_s()
         next
       end
 
@@ -59,6 +58,8 @@ class DotfilesManager
         if @config.get(:synchronize) != entries
           raise Retry.new()
         end
+      else
+        next
       end
 
       command = DotfilesManager::Utility.get_command_instance(self, entry)

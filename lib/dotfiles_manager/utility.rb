@@ -80,7 +80,7 @@ module DotfilesManager::Utility
     command = DotfilesManager.const_get(type, false).new(manager)
     command.entry = entry
     entry.each() { |key, value|
-      if key == :type
+      if key == :type || key == :on # system keys
         next
       end
 
