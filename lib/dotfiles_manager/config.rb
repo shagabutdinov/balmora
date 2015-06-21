@@ -4,7 +4,7 @@ class DotfilesManager::Config
 
   def initialize()
     @path = File.join(DotfilesManager::PATH, 'config.json')
-    @config = JSON.parse(File.read(@path), {symbolize_names: true})
+    reload()
   end
 
   def get(key)
@@ -29,6 +29,10 @@ class DotfilesManager::Config
 
   def set(key, value)
 
+  end
+
+  def reload()
+    @config = JSON.parse(File.read(@path), {symbolize_names: true})
   end
 
 end

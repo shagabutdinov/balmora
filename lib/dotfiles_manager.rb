@@ -38,6 +38,8 @@ class DotfilesManager
     _run(:push, options)
   end
 
+  class Retry < StandardError; end
+
   def _run(action, options)
     entries = @config.get(:synchronize)
     entries.each() { |entry|
@@ -54,16 +56,16 @@ class DotfilesManager
         end
 
         @config.reload()
-        new_entries = @config.get(:synchronize)
-        if new_entries != entries
-          entries = new_entries
-          retry
+        if @config.get(:synchronize) != entries
+          raise Retry.new()
         end
       end
 
       command = DotfilesManager::Utility.get_command_instance(self, entry)
       command.method(action).call(options)
     }
+  rescue Retry
+    retry
   end
 
 end
