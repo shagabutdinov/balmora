@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'balmora/cli'
+
+result = Balmora::Cli.new().run(ARGV.clone())
+exit(result)

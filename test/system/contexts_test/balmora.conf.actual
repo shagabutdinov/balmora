@@ -1,0 +1,98 @@
+{
+  "require": [
+    "balmora/command/exec",
+    "balmora/command/reload_config",
+    "balmora/context/exec",
+    "balmora/context/exec_result",
+    "balmora/context/config_changed",
+    "balmora/variables/config"
+  ],
+
+  "chdir": "${config.config_dir}",
+
+  "tasks": {
+    "test": {
+      "commands": [
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_1 > context_1",
+          "context": [
+            {"context": "exec", "exec": "test -e balmora.conf; echo $?", "operator": "equal", "value": "0"}
+          ]
+        },
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_2 > context_2",
+          "context": [
+            "test -e balmora.conf"
+          ]
+        },
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_3 > context_3",
+          "context": [
+            {"context": "exec", "exec": "test -e UNKNOWN; echo $?", "operator": "equal", "value": "0"}
+          ]
+        },
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_4 > context_4",
+          "context": [
+            "test -e balmora.conf",
+            "or",
+            "test -e UNKNOWN"
+          ]
+        },
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_5 > context_5",
+          "context": [
+            "test -e UNKNOWN",
+            "test -e balmora.conf"
+          ]
+        },
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_6 > context_6",
+          "context": [
+            {"context": "exec", "exec": "echo hello world", "operator": "match", "value": "^hello"}
+          ]
+        },
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_7 > context_7",
+          "context": [
+            {"context": "exec", "exec": "echo hello world", "operator": "not-match", "value": "^hello"}
+          ]
+        },
+
+        {"command": "reload-config"},
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_8 > context_8",
+          "context": [
+            {"context": "config-changed", "operator": "equal", "value": false}
+          ]
+        },
+
+        "cat balmora.conf.new > balmora.conf",
+        {"command": "reload-config"},
+
+        {
+          "command": "exec",
+          "exec": "echo -n CONTEXT_9 > context_9",
+          "context": [
+            {"context": "config-changed", "operator": "equal", "value": false}
+          ]
+        }
+      ]
+    }
+  }
+}

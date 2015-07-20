@@ -1,0 +1,18 @@
+{
+  "require": [
+    "balmora/command/exec",
+    "balmora/context/exec",
+    "balmora/context/exec_result",
+    "balmora/variables/config"
+  ],
+
+  "chdir": "${config.config_dir}",
+
+  "tasks": {
+    "test": {
+      "commands": [
+
+      ]
+    }
+  }
+}

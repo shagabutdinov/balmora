@@ -1,11 +1,20 @@
-Dotfiles Manager
-================
+Balmora
+=======
 
-Docs are tbd.
+Balmora - linux command runner.
 
 
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin git@github.com:shagabutdinov/dotfiles-manager.git
-git push -u origin master
+
+TODO
+====
+
+* Default log verbose mode
+* Pretty output for log
+* Dry run
+* Config prevalidation
+
+* Configuration parser
+* Raise on out/err
+
+* fix OR in contexts
+* delayed variables resolving
