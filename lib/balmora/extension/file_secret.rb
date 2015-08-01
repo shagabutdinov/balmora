@@ -7,10 +7,10 @@ module Balmora::Extension::FileSecret
   def _copy_file()
     if @action == 'pull'
       @shell.run!(_source_contents() + [_expr('|'), *@shell.sudo(), 'tee',
-        _target_path()])
+        _target_path()], change: true)
     else
       @shell.run!(['cat', _source_path(), _expr('|'), *_encrypt(), _expr('|'),
-        *@shell.sudo(), 'tee', _target_path()])
+        *@shell.sudo(), 'tee', _target_path()], change: true)
     end
   end
 

@@ -27,11 +27,13 @@ class Balmora::Shell
   attr_reader :home, :user_id
 
   def self.factory(state)
-    return self.new(state.logger)
+    return self.new(state.logger, state.options[:dry])
   end
 
-  def initialize(logger, home = nil)
+  def initialize(logger, dry, home = nil)
     @logger = logger
+    @dry = dry
+
     @run = ::Object.method(:'`')
     @system = ::Object.method(:system)
     @status = Proc.new() { $?.exitstatus }
@@ -70,10 +72,20 @@ class Balmora::Shell
       }.
       join(' ')
 
+    dry = false
+    if options[:change] == true && @dry
+      dry = true
+      shell_command = "dry: #{shell_command}"
+    end
+
     if options[:verbose] != false
       @logger.info(shell_command)
     else
       @logger.debug(shell_command)
+    end
+
+    if dry
+      return 0, ''
     end
 
     method = @run

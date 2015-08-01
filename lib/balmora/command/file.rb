@@ -14,7 +14,7 @@ class Balmora::Command::File < Balmora::Command
   end
 
   def options()
-    return super().concat([:file, :source, :storage, :action, :check_equal,
+    return super().concat([:file, :source, :storage, :action, :always,
       :options])
   end
 
@@ -53,50 +53,24 @@ class Balmora::Command::File < Balmora::Command
   protected
 
   def _create_target_path()
-    @shell.run!(['mkdir', '-p', ::File.dirname(_target_path())], verbose: false)
+    check = ['test', '-e', ::File.dirname(_target_path())]
+    if @shell.run(check, verbose: false)[0] == 0
+      return
+    end
+
+    mkdir = ['mkdir', '-p', ::File.dirname(_target_path())]
+    @shell.run!(mkdir, change: true)
   end
 
   def _copy_file()
     @shell.run!(['cp', option(:options) || OPTIONS, _source_path(),
-      _target_path()])
+      _target_path()], change: true)
   end
 
-  # def _change_file_owner()
-  #   new_owner = _get_target_required_owner()
-  #   if _get_target_actual_owner() == new_owner
-  #     return
-  #   end
-
-  #   @shell.run!(['chown', new_owner, '-R', _target_path()])
-  # end
-
-  # def _get_target_actual_owner()
-  #   owner =
-  #     @shell.run!(['stat', '-c', '%U:%G', _target_path()], verbose: false).
-  #     strip()
-
-  #   return owner
-  # end
-
-  # def _get_target_required_owner()
-  #   owner =
-  #     if @action == 'pull'
-  #       @owner
-  #     elsif @action == 'push'
-  #       @storage_owner
-  #     else
-  #       raise Error.new("Can not get owner for action #{@action}")
-  #     end
-
-  #   owner = owner || @shell.user_id()
-
-  #   return owner
-  # end
-
   def _run_required?()
-    # if @check_equal == false
-    #   return true
-    # end
+    if @always == true
+      return true
+    end
 
     command = [
       'test', '-e', _source_path(), _expr('&&'),

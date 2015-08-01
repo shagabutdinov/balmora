@@ -3,18 +3,14 @@ Balmora
 
 Balmora - linux command runner.
 
-
-
 TODO
 ====
 
-* Default log verbose mode
+* move all command params to extensions
 * Pretty output for log
-* Dry run
 * Config prevalidation
-
 * Configuration parser
 * Raise on out/err
-
-* fix OR in contexts
-* delayed variables resolving
+* Fix OR in contexts
+* Remote commands execution
+* Copy attributes over secret files

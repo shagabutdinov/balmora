@@ -33,6 +33,12 @@ class Balmora::Cli
         description: 'Quite mode; reports only errors',
       },
 
+      dry: {
+        shortcut: 'd',
+        flag: true,
+        description: 'Dry run; will not run modify commands but report it to log',
+      },
+
       verbose: {
         shortcut: 'v',
         flag: true,
