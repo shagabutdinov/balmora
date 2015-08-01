@@ -7,10 +7,11 @@ require 'fileutils'
 class Balmora::FileSecretTest < MiniTest::Test
 
   def setup()
-    @home = File.join(File.dirname(__FILE__), 'file_secret')
+    @home = File.expand_path(File.join(File.dirname(__FILE__), 'file_secret'))
     @config = File.join(@home, 'balmora.conf')
     _cleanup()
     File.write(File.join(@home, 'pull/file_3'), 'WRONG')
+    FileUtils.mkdir_p(File.join(@home, 'push/storage/push'))
     File.write(File.join(@home, 'push/storage/push/file_3'), 'FILE3')
     Balmora.run('test', {}, {config: @config})
   end

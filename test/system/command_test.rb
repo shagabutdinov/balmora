@@ -10,7 +10,6 @@ class Balmora::CommandTest < MiniTest::Test
     @home = File.join(File.dirname(__FILE__), 'command_test')
     @config = File.join(@home, 'balmora.conf')
     _cleanup()
-    p @config
     Balmora.run('test', {}, {config: @config})
   end
 
@@ -23,6 +22,7 @@ class Balmora::CommandTest < MiniTest::Test
       'command',
       'sudo',
       'test/chdir',
+      'test/sudo',
     ]
 
     files.each() { |file|

@@ -74,7 +74,7 @@ class Balmora::Config
     @old = _deep_clone(@config)
 
     Dir.chdir(File.dirname(@path)) {
-      @config = _load(@path)
+      @config = _load(File.basename(@path))
     }
 
     @config[:config_dir] = File.dirname(@path)

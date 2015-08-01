@@ -2,7 +2,23 @@ class Balmora::Command::File < Balmora::Command
 
   class Error < StandardError; end
 
-  OPTIONS = '-T'
+  def self.resolve_path(shell, source, storage, path)
+    if !source.nil?()
+      return shell.expand(source)
+    end
+
+    storage = shell.expand(storage)
+
+    if path.start_with?('~/')
+      result = ::File.join(storage, path[1..-1])
+    elsif path.start_with?('/')
+      result = ::File.join(storage, path[1..-1])
+    else
+      result = ::File.join(storage, path)
+    end
+
+    return result
+  end
 
   def init()
     super()
@@ -19,13 +35,12 @@ class Balmora::Command::File < Balmora::Command
   end
 
   def run()
-    if !_run_required?()
+    if  @always == true || _source_equals_to_target?()
       return nil
     end
 
     _create_target_path()
     _copy_file()
-    # _change_file_owner()
   end
 
   def verify()
@@ -63,15 +78,11 @@ class Balmora::Command::File < Balmora::Command
   end
 
   def _copy_file()
-    @shell.run!(['cp', option(:options) || OPTIONS, _source_path(),
+    @shell.run!(['cp', option(:options) || '-T', _source_path(),
       _target_path()], change: true)
   end
 
-  def _run_required?()
-    if @always == true
-      return true
-    end
-
+  def _source_equals_to_target?()
     command = [
       'test', '-e', _source_path(), _expr('&&'),
       *@shell.sudo(), 'test', '-e', _target_path(), _expr('&&'),
@@ -80,7 +91,7 @@ class Balmora::Command::File < Balmora::Command
       _expr('"$('), *@shell.sudo(), *_target_contents(), _expr('| md5sum)" ]'),
     ]
 
-    return @shell.run(command, verbose: false)[0] != 0
+    return @shell.run(command, verbose: false)[0] == 0
   end
 
   def _source_contents()
@@ -103,14 +114,6 @@ class Balmora::Command::File < Balmora::Command
     return @shell.expression(expression)
   end
 
-  def _owner()
-    return @owner || ENV['USER']
-  end
-
-  def _storage_owner()
-    return @storage_owner || ENV['USER']
-  end
-
   private
 
   def _files()
@@ -122,21 +125,7 @@ class Balmora::Command::File < Balmora::Command
   end
 
   def _resolve_source_path()
-    if !@source.nil?()
-      return @shell.expand(@source)
-    end
-
-    storage = @shell.expand(@storage)
-
-    if @file.start_with?('~/')
-      result = ::File.join(storage, @file[1..-1])
-    elsif @file.start_with?('/')
-      result = ::File.join(storage, @file[1..-1])
-    else
-      result = ::File.join(storage, @file)
-    end
-
-    return result
+    return File.resolve_path(@shell, @source, @storage, @file)
   end
 
 end
