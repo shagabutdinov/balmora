@@ -6,9 +6,9 @@ class Balmora::Shell
 
     attr_reader :status
 
-    def initialize(message, status)
+    def initialize(message, status = nil)
       super(message)
-      @status = status
+      @status = status || 1
     end
 
   end
