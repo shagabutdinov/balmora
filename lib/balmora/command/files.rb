@@ -62,8 +62,8 @@ class Balmora::Command::Files < Balmora::Command
         path = @shell.expand(path)
       end
 
-      command = ['test', '-d', path, @shell.expression('&&'), 'find', path,
-        '-type', 'f']
+      command = ['test', '-d', path, @shell.expression('&&'), *@shell.sudo(),
+        'find', path, '-type', 'f']
 
       dir_status, dir_files = @shell.run(command, verbose: false)
       if dir_status != 0

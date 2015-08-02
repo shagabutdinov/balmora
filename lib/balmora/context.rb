@@ -31,7 +31,7 @@ class Balmora::Context < Balmora::Command
   end
 
   def options()
-    return [:operator, :value]
+    return [:operator, :operand]
   end
 
   def verify()
@@ -39,8 +39,8 @@ class Balmora::Context < Balmora::Command
       raise Error.new('"operator" should be defined')
     end
 
-    if @value.nil?()
-      raise Error.new('"value" should be defined')
+    if @operand.nil?()
+      raise Error.new('"operand" should be defined')
     end
   end
 
@@ -57,17 +57,17 @@ class Balmora::Context < Balmora::Command
 
     case operator
       when 'match'
-        return _not(is_not, result.match(@value) != nil)
+        return _not(is_not, result.match(@operand) != nil)
       when 'equal'
-        return _not(is_not, result == @value)
+        return _not(is_not, result == @operand)
       when 'greater'
-        return _not(is_not, result > @value)
+        return _not(is_not, result > @operand)
       when 'greater-or-equal'
-        return _not(is_not, result >= @value)
+        return _not(is_not, result >= @operand)
       when 'lesser'
-        return _not(is_not, result < @value)
+        return _not(is_not, result < @operand)
       when 'lesser-or-equal'
-        return _not(is_not, result <= @value)
+        return _not(is_not, result <= @operand)
     end
 
     raise Error.new("Unknown operator #{operator}")

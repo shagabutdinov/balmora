@@ -25,10 +25,9 @@ class Balmora::Contexts
         context: 'exec-result',
         exec: context,
         operator: 'equal',
-        value: 0,
+        operand: 0,
       }
     end
-
 
     context_class = @extension.get(Balmora::Context, context[:context])
     context_instance = context_class.new(@state, context)
@@ -68,9 +67,3 @@ class Balmora::Contexts
   end
 
 end
-
-# [
-#   {"context": "test -e folder/file1; echo $?", "operator": "equal", "value": "0"},
-#   "or",
-#   {"context": "test -e folder/file2; echo $?", "operator": "equal", "value": "0"},
-# ]

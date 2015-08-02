@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Leonid Shagabutdinov']
   s.email       = 'leonid@shagabutdinov.com'
   s.files       = [
-      'lib/balmora.rb', 
+      'lib/balmora.rb',
       'lib/balmora/config.rb',
       'lib/balmora/state.rb',
       'lib/balmora/shell.rb',
@@ -37,7 +37,10 @@ Gem::Specification.new do |s|
       'lib/balmora/context/config_changed.rb',
       'lib/balmora/arguments.rb',
   ]
+
   s.executables << 'balmora'
   s.homepage    = 'http://github.com/shagabutdinov/balmora'
   s.license     = 'MIT'
+
+  s.add_runtime_dependency "term-ansicolor", ["~> 1.4"]
 end

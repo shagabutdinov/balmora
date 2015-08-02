@@ -18,7 +18,7 @@ class Balmora::Command::Exec < Balmora::Command
       exec = [@shell.expression(exec)]
     end
 
-    @shell.system(exec)
+    @shell.system(exec, change: true)
   end
 
 end

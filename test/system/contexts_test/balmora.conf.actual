@@ -17,7 +17,7 @@
           "command": "exec",
           "exec": "echo -n CONTEXT_1 > context_1",
           "context": [
-            {"context": "exec", "exec": "test -e balmora.conf; echo $?", "operator": "equal", "value": "0"}
+            {"context": "exec", "exec": "test -e balmora.conf; echo $?", "operator": "equal", "operand": "0"}
           ]
         },
 
@@ -33,7 +33,7 @@
           "command": "exec",
           "exec": "echo -n CONTEXT_3 > context_3",
           "context": [
-            {"context": "exec", "exec": "test -e UNKNOWN; echo $?", "operator": "equal", "value": "0"}
+            {"context": "exec", "exec": "test -e UNKNOWN; echo $?", "operator": "equal", "operand": "0"}
           ]
         },
 
@@ -60,7 +60,7 @@
           "command": "exec",
           "exec": "echo -n CONTEXT_6 > context_6",
           "context": [
-            {"context": "exec", "exec": "echo hello world", "operator": "match", "value": "^hello"}
+            {"context": "exec", "exec": "echo hello world", "operator": "match", "operand": "^hello"}
           ]
         },
 
@@ -68,7 +68,7 @@
           "command": "exec",
           "exec": "echo -n CONTEXT_7 > context_7",
           "context": [
-            {"context": "exec", "exec": "echo hello world", "operator": "not-match", "value": "^hello"}
+            {"context": "exec", "exec": "echo hello world", "operator": "not-match", "operand": "^hello"}
           ]
         },
 
@@ -78,7 +78,7 @@
           "command": "exec",
           "exec": "echo -n CONTEXT_8 > context_8",
           "context": [
-            {"context": "config-changed", "operator": "equal", "value": false}
+            {"context": "config-changed", "operator": "equal", "operand": false}
           ]
         },
 
@@ -89,7 +89,7 @@
           "command": "exec",
           "exec": "echo -n CONTEXT_9 > context_9",
           "context": [
-            {"context": "config-changed", "operator": "equal", "value": false}
+            {"context": "config-changed", "operator": "equal", "operand": false}
           ]
         }
       ]

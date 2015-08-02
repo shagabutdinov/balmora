@@ -7,6 +7,7 @@ class Balmora::Arguments
 
     result = {}
     index = 0
+    tail = nil
     while index < argv.length
       arg = argv[index]
 
@@ -19,13 +20,20 @@ class Balmora::Arguments
       end
 
       if new_index.nil?()
-        return result, argv[index..-1]
+        tail = argv[index..-1]
+        break
       end
 
       index = new_index + 1
     end
 
-    return result, nil
+    options.each() { |key, value|
+      if value[:flag] && !result.has_key?(key)
+        result[key] = false
+      end
+    }
+
+    return result, tail
   end
 
   protected
