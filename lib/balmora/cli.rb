@@ -1,6 +1,5 @@
 require 'balmora'
 require 'balmora/arguments'
-require 'optparse'
 
 class Balmora::Cli
 
