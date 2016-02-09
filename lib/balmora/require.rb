@@ -18,7 +18,7 @@ globs = [
 
 Dir.chdir(File.dirname(__FILE__)) {
   globs.each() { |glob|
-    Dir.glob(glob).each() { |file|
+    Dir.glob(glob).sort().each() { |file|
       require ::File.join('balmora', file)
     }
   }

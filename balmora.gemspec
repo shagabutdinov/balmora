@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'balmora'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.summary     = 'Balmora'
   s.description = 'Balmora - linux task runner'
   s.authors     = ['Leonid Shagabutdinov']
